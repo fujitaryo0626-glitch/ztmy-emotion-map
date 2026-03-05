@@ -71,9 +71,10 @@ function render(){
   for(var i=0;i<S.length;i++){
     var s=S[i];
     var ok=true;
-    if(txtF&&s.name.indexOf(txtF)<0)ok=false;
+    var phHits=0;
+    if(txtF){var nameHit=s.name.indexOf(txtF)>=0;if(!nameHit){for(var j=0;j<P.length;j++){if(P[j].song===s.name&&P[j].ph.indexOf(txtF)>=0)phHits++;}}if(!nameHit&&phHits===0)ok=false;}
     if(emoF&&s.t1!==emoF&&s.t2!==emoF&&s.t3!==emoF)ok=false;
-    if(ok)songs.push({s:s,i:i});
+    if(ok)songs.push({s:s,i:i,phHits:phHits});
   }
   var ss=null,sh=null,ssIdx=-1;
   if(sel){
@@ -88,7 +89,7 @@ function render(){
     o+="<div class=\"chip "+(emoF===e?"on":"")+"\" style=\"--c:"+EC[e]+"22;--ct:"+EC[e]+";--cb:"+EC[e]+"66\" data-action=\"emo\" data-val=\""+e+"\"><span class=\"dot\" style=\"background:"+EC[e]+"\"></span>"+e+"</div>";
   }
   o+="</div>";
-  o+="<div class=\"search\"><input id=\"sinp\" type=\"text\" placeholder=\"曲名を検索…\" value=\""+he(txtF)+"\"></div>";
+  o+="<div class=\"search\"><input id=\"sinp\" type=\"text\" placeholder=\"曲名・歌詞を検索…\" value=\""+he(txtF)+"\"></div>";
   o+="<div class=\"grid\">";
   for(var si=0;si<songs.length;si++){
     var s=songs[si].s,idx=songs[si].i;
@@ -99,7 +100,7 @@ function render(){
     o+="<div class=\"card "+(isSel?"sel":"")+"\" style=\""+(isSel?"background:linear-gradient(135deg,"+c+"15,"+c+"25);--bc:"+c+"44":"")+"\" data-action=\"pick\" data-val=\""+idx+"\">";
     o+="<div class=\"top\"><span class=\"nm\">"+he(s.name)+"</span>"+pill(s.t1)+"</div>";
     if(h)o+=bar(h);
-    o+="<div class=\"desc\">"+he(s.sum)+"</div></div>";
+    o+="<div class=\"desc\">"+he(s.sum)+"</div>"+(item.phHits>0?"<div style=\"font-size:10px;color:#9B5DE5;margin-top:4px\">\u266a \u6b4c\u8a5e\u306b"+item.phHits+"\u4ef6\u30d2\u30c3\u30c8</div>":"")+"</div>";
   }
   o+="</div>";
   if(!songs.length)o+="<div class=\"empty\">一致する曲がありません</div>";
