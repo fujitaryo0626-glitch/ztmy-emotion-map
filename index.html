@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>よもすがら | ZUTOMAYO Portal Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0a1a;
+      --bg2:#0d1022;
+      --panel:#111428;
+      --panel2:#171b33;
+      --line:#2a3156;
+      --text:#eef1ff;
+      --muted:#b6bfdc;
+      --soft:#8fa0d0;
+      --accent:#9b7bff;
+      --accent2:#56d7ff;
+      --good:#87e7a2;
+      --warn:#ffd36e;
+      --shadow:0 10px 30px rgba(0,0,0,.28);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,#090915 0%,#0b0d1f 100%);color:var(--text);font-family:'Noto Sans JP',system-ui,sans-serif}
+    a{color:inherit;text-decoration:none}
+    .wrap{width:min(1180px,calc(100vw - 28px));margin:0 auto;padding:20px 0 72px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+    .brand strong{color:var(--text);font-size:15px}
+    .hero{
+      position:relative;overflow:hidden;border:1px solid var(--line);border-radius:30px;padding:24px;
+      background:
+        radial-gradient(1200px 600px at 100% -10%,rgba(86,215,255,.18),transparent 45%),
+        radial-gradient(700px 400px at -10% 0%,rgba(155,123,255,.22),transparent 40%),
+        linear-gradient(180deg,#13172d 0%,#0e1224 100%);
+      box-shadow:var(--shadow)
+    }
+    .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:start}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;font-size:12px;color:#c9d2f5;background:rgba(255,255,255,.05);padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.08)}
+    h1{font-size:clamp(30px,4.4vw,54px);line-height:1.05;margin:14px 0 12px;letter-spacing:.02em}
+    .lead{max-width:780px;color:var(--muted);font-size:15px;line-height:1.9;margin:0}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:12px;color:#d9e0ff}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:14px;font-weight:700;font-size:14px;border:1px solid var(--line);background:#1a1f3c;color:var(--text)}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#6b8bff);border:none}
+    .btn.ghost{background:transparent}
+    .hero-side{display:grid;gap:14px}
+    .thumb{border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:#0e1122;min-height:220px;box-shadow:var(--shadow)}
+    .thumb img{display:block;width:100%;height:100%;object-fit:cover}
+    .note{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:16px}
+    .note .k{font-size:12px;color:var(--soft);margin-bottom:8px}
+    .note .v{font-size:15px;line-height:1.85;color:var(--text)}
+    .tabs{position:sticky;top:0;z-index:6;display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;padding:12px 0;background:linear-gradient(180deg,rgba(11,13,31,.96),rgba(11,13,31,.75));backdrop-filter:blur(12px)}
+    .tab{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:#131830;color:var(--text);font-size:13px;font-weight:700}
+    .section{margin-top:26px}
+    .section-title{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+    .section-title h2{font-size:26px;margin:0}
+    .section-title p{margin:0;color:var(--muted);line-height:1.8;font-size:14px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .card{background:linear-gradient(180deg,#12162c,#0f1326);border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow)}
+    .card h3{margin:0 0 10px;font-size:19px}
+    .card p{margin:0;color:var(--muted);line-height:1.9;font-size:14px}
+    .mini{display:grid;gap:10px;margin-top:12px}
+    .mini-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:12px}
+    .mini-item .ttl{font-size:14px;font-weight:700}
+    .mini-item .meta{margin-top:6px;font-size:12px;color:var(--soft);line-height:1.7}
+    .timeline{display:grid;gap:12px}
+    .time-item{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:start;padding:12px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+    .date{font-size:12px;color:var(--accent2);font-weight:800;letter-spacing:.03em;padding-top:2px}
+    .body .ttl{font-size:15px;font-weight:800;margin-bottom:6px}
+    .body .txt{font-size:14px;color:var(--muted);line-height:1.85}
+    .quote{padding:12px 14px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));margin-top:10px}
+    .quote .q{font-size:14px;line-height:1.8}
+    .quote .label{font-size:11px;color:var(--soft);margin-bottom:6px}
+    .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .pill{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:12px;color:#dce3ff}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .foot{margin-top:28px;color:var(--soft);font-size:12px;line-height:1.8}
+    .hr{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);margin:18px 0}
+    .badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 10px;background:rgba(135,231,162,.08);border:1px solid rgba(135,231,162,.22);color:#dfffe8;font-size:12px}
+    @media (max-width:960px){
+      .hero-grid,.grid-3,.grid-2,.split{grid-template-columns:1fr}
+      .time-item{grid-template-columns:1fr}
+      .thumb{min-height:200px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand"><strong>ZUTOMAYO Portal</strong><span>Prototype / Song Page Demo</span></div>
+      <a class="btn ghost" href="./index.html">感情地図へ戻る</a>
+    </div>
+
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">新曲ページ試作 / Fact・Context・Interpretation</div>
+          <h1>よもすがら</h1>
+          <p class="lead">
+            初見の人には入口を、一次情報を確認したい人には公式導線を、コアファンには深い読解を置くための曲ページ試作。
+            このページでは、事実レイヤーと解釈レイヤーを分けて、同じ曲に複数の入り口を作る。
+          </p>
+          <div class="chips">
+            <span class="chip">Huluオリジナルドラマ「時計館の殺人」OP</span>
+            <span class="chip">2026/3/5 MV公開</span>
+            <span class="chip">一次情報と考察を分離</span>
+          </div>
+          <div class="hero-actions">
+            <a class="btn primary" href="https://youtu.be/rsjaFk0Z5es" target="_blank" rel="noopener">公式MVを開く</a>
+            <a class="btn" href="https://zutomayo.net/news/581" target="_blank" rel="noopener">公式ニュース</a>
+            <a class="btn" href="./index.html">感情地図で見る</a>
+          </div>
+        </div>
+        <div class="hero-side">
+          <a class="thumb" href="https://youtu.be/rsjaFk0Z5es" target="_blank" rel="noopener">
+            <img src="https://i.ytimg.com/vi/rsjaFk0Z5es/hqdefault.jpg" alt="よもすがら MV サムネイル">
+          </a>
+          <div class="note">
+            <div class="k">この曲を3行で</div>
+            <div class="v">
+              濁った正解や思想の拘束をくぐり抜けながら、壊れた呼吸と針のズレを抱えてなお「今ある答え」に踏みとどまろうとする曲。<br>
+              ただ沈むだけではなく、終わらせることと描き直すことが同時に走る。<br>
+              温もりに刺される痛みと、それでも散歩へ向かう小さな前進が同居している。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="tabs">
+      <a class="tab" href="#fact">Fact</a>
+      <a class="tab" href="#context">Context</a>
+      <a class="tab" href="#interpretation">Interpretation</a>
+      <a class="tab" href="#future">Live / Future</a>
+    </div>
+
+    <section id="fact" class="section">
+      <div class="section-title">
+        <h2>Fact</h2>
+        <p>ここは事実レイヤー。公式発表・公式MV・時系列を置く場所。</p>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <h3>公式発表</h3>
+          <p>
+            「よもすがら」は、Huluオリジナルドラマ「時計館の殺人」のオープニング曲として発表された新曲。前作「十角館の殺人」で「低血ボルト」が起用されており、綾辻ミステリー「館」シリーズとのタッグは2度目。
+          </p>
+          <div class="mini">
+            <div class="mini-item">
+              <div class="ttl">ニュース 1</div>
+              <div class="meta">2026/1/22 公式発表</div>
+            </div>
+            <div class="mini-item">
+              <div class="ttl">ニュース 2</div>
+              <div class="meta">2026/2/24 OP ver.予告映像解禁</div>
+            </div>
+            <div class="mini-item">
+              <div class="ttl">ニュース 3</div>
+              <div class="meta">2026/3/5 21:00 MV公開・配信開始</div>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <h3>公式リンク</h3>
+          <div class="mini">
+            <a class="mini-item" href="https://zutomayo.net/news/567" target="_blank" rel="noopener">
+              <div class="ttl">時計館の殺人 OP 決定ニュース</div>
+              <div class="meta">zutomayo.net / 2026.01.22</div>
+            </a>
+            <a class="mini-item" href="https://zutomayo.net/news/578" target="_blank" rel="noopener">
+              <div class="ttl">OP ver.予告映像解禁</div>
+              <div class="meta">zutomayo.net / 2026.02.24</div>
+            </a>
+            <a class="mini-item" href="https://zutomayo.net/news/581" target="_blank" rel="noopener">
+              <div class="ttl">MV公開・配信開始</div>
+              <div class="meta">zutomayo.net / 2026.03.04掲載</div>
+            </a>
+            <a class="mini-item" href="https://youtu.be/rsjaFk0Z5es" target="_blank" rel="noopener">
+              <div class="ttl">公式MV</div>
+              <div class="meta">YouTube / ずっと真夜中でいいのに。 ZUTOMAYO</div>
+            </a>
+          </div>
+        </article>
+        <article class="card">
+          <h3>まずここだけ見ればOK</h3>
+          <p>
+            初見の人は、まず公式MV→1月22日の発表ニュース→2月24日の予告解禁の順で触ると入りやすい。曲の役割と空気感を先に掴んでから、歌詞や感情地図に入る導線を想定している。
+          </p>
+          <div class="pillrow">
+            <span class="pill">入口</span>
+            <span class="pill">公式MV</span>
+            <span class="pill">ドラマOP起用</span>
+            <span class="pill">館シリーズ再タッグ</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <h3>時系列</h3>
+        <div class="timeline">
+          <div class="time-item">
+            <div class="date">2026/01/22</div>
+            <div class="body">
+              <div class="ttl">「時計館の殺人」オープニング曲に決定</div>
+              <div class="txt">綾辻行人原作のHuluオリジナルドラマ「時計館の殺人」のオープニング曲として、新曲「よもすがら」が公式発表される。</div>
+            </div>
+          </div>
+          <div class="time-item">
+            <div class="date">2026/02/24</div>
+            <div class="body">
+              <div class="ttl">OP ver.予告映像解禁</div>
+              <div class="txt">「よもすがら」オープニング曲 ver. の予告映像情報が出て、音源配信とMV公開が 3/5 21:00 と告知される。</div>
+            </div>
+          </div>
+          <div class="time-item">
+            <div class="date">2026/03/05 21:00</div>
+            <div class="body">
+              <div class="ttl">MV公開・各DL/Streaming配信開始</div>
+              <div class="txt">公式MVが公開され、各配信サービスでの配信が始まる。ここをポータル側の「最新情報」カードにも流し込める設計を想定。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="context" class="section">
+      <div class="section-title">
+        <h2>Context</h2>
+        <p>ここは理解の助けになる周辺レイヤー。初見の人が離脱しないための要約と入口。</p>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <h3>初見ポイント</h3>
+          <p>
+            まず強いのは、「濁った正解」「思想に縛られんのはもうやめた」「今ある答えだけ」という語群。正しさそのものより、濁り込みの現実の中でどう選ぶかに重心がある。
+          </p>
+          <div class="quote">
+            <div class="label">短い歌詞フック</div>
+            <div class="q">「濁った正解」「今ある答えだけ」</div>
+          </div>
+        </article>
+        <article class="card">
+          <h3>入口の言い換え</h3>
+          <p>
+            この曲は「壊れたものをただ嘆く曲」ではなく、「終わらせる / 描き直す / 気付かせる」を同時にやろうとする曲として置くと入りやすい。痛みはあるが、最後は停止ではなく再起動へ向く。
+          </p>
+          <div class="quote">
+            <div class="label">短い歌詞フック</div>
+            <div class="q">「紅色を自由に描こう」「希望を問う」</div>
+          </div>
+        </article>
+        <article class="card">
+          <h3>他曲との足場</h3>
+          <p>
+            入口としては、「低血ボルト」「残機」「勘ぐれい」あたりと並べると、緊張・抵抗・再起の流れが見えやすい。今後は感情地図側の類似曲と双方向リンクにできる。
+          </p>
+          <div class="pillrow">
+            <span class="pill">低血ボルト</span>
+            <span class="pill">残機</span>
+            <span class="pill">勘ぐれい</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="split" style="margin-top:14px">
+        <article class="card">
+          <h3>初心者向けの1分導線</h3>
+          <div class="mini">
+            <div class="mini-item">
+              <div class="ttl">1. 先にMVを見る</div>
+              <div class="meta">映像の不穏さと推進力を先に身体で受ける。</div>
+            </div>
+            <div class="mini-item">
+              <div class="ttl">2. 公式ニュースを読む</div>
+              <div class="meta">ドラマOPとしての役割と発表タイミングを把握する。</div>
+            </div>
+            <div class="mini-item">
+              <div class="ttl">3. 感情地図に降りる</div>
+              <div class="meta">曲全体の流れ → フレーズ → 比較 の順で入る。</div>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <h3>この曲で迷いやすい点</h3>
+          <div class="mini">
+            <div class="mini-item">
+              <div class="ttl">終わりと再起動が同時にある</div>
+              <div class="meta">「終わらせようよ」と「起動を謳う」が同居するため、単純な絶望曲にも、単純な希望曲にも収まりにくい。</div>
+            </div>
+            <div class="mini-item">
+              <div class="ttl">“正解”が肯定されていない</div>
+              <div class="meta">正しさが濁っているまま泳ぐという語りなので、明快な答えを言う曲ではない。</div>
+            </div>
+            <div class="mini-item">
+              <div class="ttl">温もりが痛みとしても働く</div>
+              <div class="meta">救いがそのまま快方にはならず、むしろ刺さるものとして描かれている。</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="interpretation" class="section">
+      <div class="section-title">
+        <h2>Interpretation</h2>
+        <p>ここは解釈レイヤー。事実ではなく、読解の入口を置く。</p>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <h3>感情フロー仮説</h3>
+          <p>
+            現時点では、葛藤 → 葛藤 → 恋慕 → 回復 を仮の主線として置くのが自然。前半はズレと拘束、中盤は温もりに刺される痛み、後半で「描く / 気付かせる / 散歩へ」がわずかな回復として立ち上がる。
+          </p>
+          <div class="pillrow">
+            <span class="pill">葛藤</span>
+            <span class="pill">恋慕</span>
+            <span class="pill">回復</span>
+            <span class="pill">反抗</span>
+          </div>
+        </article>
+        <article class="card">
+          <h3>読みの核</h3>
+          <p>
+            この曲の「終わらせる」は破壊だけではなく、誤った育て方や拘束の継続を止めることでもある。そのうえで「紅色を自由に描こう」が来るので、終止符と再描画が一続きになっている。
+          </p>
+          <div class="quote">
+            <div class="label">読解の芯に置く短句</div>
+            <div class="q">「思想に縛られんのはもうやめた」</div>
+          </div>
+        </article>
+        <article class="card">
+          <h3>コアファン向けの入口</h3>
+          <p>
+            深読みするなら、「濁った正解」「償える方法」「記号を乞う / 軌道を断つ / 起動を謳う / 希望を問う」の連鎖が大きい。ここはのちに掛詞・音連鎖・多義性のレイヤーを追加する余地がある。
+          </p>
+          <div class="badge">将来: ダブルミーニング候補タグを追加</div>
+        </article>
+      </div>
+
+      <div class="split" style="margin-top:14px">
+        <article class="card">
+          <h3>Ryoの考察を載せる場所</h3>
+          <p>
+            ここは長文考察をそのまま差し込める空き領域。運用上は、Fact と Context を固定棚にして、Interpretation のみ後から深く差し替えていくのが最も相性が良い。
+          </p>
+          <div class="hr"></div>
+          <p>
+            推奨構成: 0章導入 → 歌詞フック → セクションごとの解釈 → 小結 → 類似曲との往復。
+          </p>
+        </article>
+        <article class="card">
+          <h3>感情地図との接続</h3>
+          <p>
+            このページは、将来的に「感情地図で開く」ボタンから該当曲詳細へ飛ばし、逆に感情地図側からは「曲ポータルで読む」へ戻せるようにする。入口と深掘りを往復させるための橋のページ。
+          </p>
+          <div class="mini">
+            <a class="mini-item" href="./index.html">
+              <div class="ttl">感情地図で見る</div>
+              <div class="meta">曲の感情フロー、フレーズ分析、類似曲へ接続。</div>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="future" class="section">
+      <div class="section-title">
+        <h2>Live / Future</h2>
+        <p>ここは将来のリアルタイム枠。ポータルであり巨大掲示板のような場へ伸ばす入口。</p>
+      </div>
+      <div class="grid-2">
+        <article class="card">
+          <h3>次に足すもの</h3>
+          <div class="mini">
+            <div class="mini-item">
+              <div class="ttl">公式X / 公式ニュースの時系列埋め込み</div>
+              <div class="meta">公式ポストとニュースを曲ごとに一覧化。まずは手動選定で十分強い。</div>
+            </div>
+            <div class="mini-item">
+              <div class="ttl">厳選考察ポスト</div>
+              <div class="meta">Ryoが選んだ鋭い考察だけを数件埋め込む。量より質を優先。</div>
+            </div>
+            <div class="mini-item">
+              <div class="ttl">今この曲が話題、を見せる枠</div>
+              <div class="meta">最新MV / リリース / 反応数の“ライブ感”を入口にする。</div>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <h3>実装メモ</h3>
+          <p>
+            リアルタイム部分は、最初から全自動にするより、公式投稿と厳選ポストを手で置く運用が安全。一次情報の信頼感と、コミュニティの温度感を両立しやすい。
+          </p>
+          <div class="quote">
+            <div class="label">将来の理想像</div>
+            <div class="q">「ここを見れば、今なにが起きているかも、深く読む入口も、同時にわかる」</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="foot">
+      このページは試作。Fact は公式情報ベース、Context は理解補助、Interpretation は解釈の入口として分離している。<br>
+      画像・リンクは公式導線へ接続。長文考察、感情地図、リアルタイム埋め込みは今後拡張前提。
+    </div>
+  </div>
+</body>
+</html>
