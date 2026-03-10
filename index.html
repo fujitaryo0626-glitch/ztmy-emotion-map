@@ -535,7 +535,7 @@ async function fillAndRunShort() {
     result.textContent = "";
 
     try {
-      var res = await fetch("/api/consider", {
+      var res = await fetch("https://ztmy-map-api.onrender.com/api/consider", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
